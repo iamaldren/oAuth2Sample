@@ -11,4 +11,10 @@ public class LdapProperties {
 
     private String url;
 
+    private String dn;
+
+    private String password;
+
+    private String base;
+
 }

@@ -1,0 +1,2 @@
+ldap:
+  url: ldap://ldap.forumsys.com:389

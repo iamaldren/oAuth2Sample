@@ -1,19 +1,18 @@
 package com.aldren.config;
 
 import com.aldren.ldap.LdapService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.SearchControls;
-import javax.naming.directory.SearchResult;
+import javax.naming.directory.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Configuration
 public class TestConfig {
 
@@ -22,21 +21,19 @@ public class TestConfig {
 
     @Bean
     public String loadDirContext() throws NamingException {
-        DirContext ctx = svc.ldapContext("riemann","password");
+        DirContext ctx = svc.ldapContext("cn=read-only-admin,dc=example,dc=com","password");
 
-        SearchControls searchControls = new SearchControls();
-        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        String searchFilter = "(&(objectClass=user)(sAMAccountName={0}))";
+        log.info("Context::" + ctx);
 
-        Set<String> roles = new HashSet<>();
-
-        NamingEnumeration<?> answer = ctx.search("dc=example,dc=com", searchFilter, new Object[]{"riemann"}, searchControls);
-
-        while(answer.hasMoreElements()) {
-            SearchResult sr = (SearchResult) answer.next();
-            Attributes attr = sr.getAttributes();
-
-            System.out.println("Attributes::" + attr.toString());
+        Attributes attrs = ctx.getAttributes("");
+        NamingEnumeration attrsEnum = ctx.search("ou=mathematicians,dc=example,dc=com", attrs);
+        while (attrsEnum.hasMore()) {
+            Attribute attr = (Attribute) attrsEnum.next();
+            log.info("Attribute: " + attr.getID());
+            NamingEnumeration valuesEnum = attr.getAll();
+            while (valuesEnum.hasMore()) {
+                log.info("Value: " + valuesEnum.next());
+            }
         }
 
         return "";

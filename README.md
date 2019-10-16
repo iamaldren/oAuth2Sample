@@ -1,1 +1,0 @@
-#oAuth2 and LDAP Integration

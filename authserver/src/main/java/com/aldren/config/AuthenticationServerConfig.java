@@ -11,8 +11,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 
 import javax.sql.DataSource;
 
-@Configuration
-@EnableAuthorizationServer
+//@Configuration
+//@EnableAuthorizationServer
 public class AuthenticationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired

@@ -1,3 +1,5 @@
 /.idea
-/target
-/*.iml
+*.iml
+authserver/.idea
+authserver/target
+authserver/*.iml

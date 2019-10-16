@@ -20,17 +20,16 @@ import java.util.*;
 @EnableConfigurationProperties(LdapProperties.class)
 public class LdapService {
 
-    @Autowired
-    private LdapProperties ldap;
-
     private static final String MAIL = "mail";
     private static final String CN = "cn";
     private static final String OBJECT_CLASS = "objectClass";
+    @Autowired
+    private LdapProperties ldap;
 
     public UsernamePasswordAuthenticationToken authenticate(String username, String password) throws NamingException {
         DirContext ctx = null;
 
-        Map<String,String> details = new HashMap<>();
+        Map<String, String> details = new HashMap<>();
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         try {
@@ -47,20 +46,17 @@ public class LdapService {
                     .append(",dc=example,dc=com");
 
             NamingEnumeration<SearchResult> ne = ctx.search(builder.toString(), searchFilter, searchControls);
-            while (ne.hasMoreElements())
-            {
+            while (ne.hasMoreElements()) {
                 SearchResult match = ne.nextElement();
 
                 Attributes attrs = match.getAttributes();
 
                 NamingEnumeration e = attrs.getAll();
 
-                while (e.hasMoreElements())
-                {
+                while (e.hasMoreElements()) {
                     Attribute attr = (Attribute) e.nextElement();
-                    if(attr.getID().equals(OBJECT_CLASS)) {
-                        for (int i=0; i < attr.size(); i++)
-                        {
+                    if (attr.getID().equals(OBJECT_CLASS)) {
+                        for (int i = 0; i < attr.size(); i++) {
                             authorities.add(new SimpleGrantedAuthority((String) attr.get(i)));
                         }
                     } else {
@@ -69,7 +65,7 @@ public class LdapService {
                 }
             }
         } finally {
-            if(ctx != null) {
+            if (ctx != null) {
                 ctx.close();
             }
         }
@@ -81,7 +77,7 @@ public class LdapService {
     }
 
     private DirContext getLdapConnection(String username, String password) throws NamingException {
-        Hashtable<String,String> env = new Hashtable<>();
+        Hashtable<String, String> env = new Hashtable<>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
         env.put(Context.SECURITY_PRINCIPAL, ldap.getDn());

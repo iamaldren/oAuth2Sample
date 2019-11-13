@@ -10,8 +10,6 @@ spring:
     validationQuery: SELECT 1
   jpa:
     show-sql: true
-    hibernate:
-      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -20,3 +18,8 @@ ldap:
   dn: cn=read-only-admin,dc=example,dc=com
   password: password
   base: dc=example,dc=com
+oauth2:
+  keystore:
+    file: iamaldren.p12
+    secret: 
+    alias:

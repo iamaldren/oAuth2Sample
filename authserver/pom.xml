@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.aldren</groupId>
-    <artifactId>oAuth2Sample</artifactId>
+    <artifactId>oAuth2AuthServer</artifactId>
     <version>1.0.0</version>
 
     <name>oAuth2Sample</name>
@@ -73,6 +73,9 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/truststore</directory>
             </resource>
         </resources>
         <plugins>

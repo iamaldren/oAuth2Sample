@@ -2,7 +2,7 @@ package com.aldren.authenticator;
 
 import com.aldren.ldap.LdapService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.naming.NamingException;
 
 @Component
-public class LdapAuthenticationProvider implements AuthenticationProvider {
+public class LdapAuthenticationProvider implements AuthenticationManager {
 
     @Autowired
     private LdapService ldapService;
@@ -29,8 +29,4 @@ public class LdapAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
-    @Override
-    public boolean supports(Class<?> aClass) {
-        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(aClass);
-    }
 }

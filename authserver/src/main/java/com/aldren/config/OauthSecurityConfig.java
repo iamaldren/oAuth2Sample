@@ -13,15 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class OauthSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    @Qualifier("ldapAuthenticationProvider")
-    private AuthenticationProvider authenticationProvider;
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider);
-    }
-
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.csrf().disable()

@@ -1,6 +1,8 @@
 package com.aldren.ldap;
 
+import com.aldren.model.Users;
 import com.aldren.properties.LdapProperties;
+import com.aldren.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,6 +27,8 @@ public class LdapService {
     private static final String OBJECT_CLASS = "objectClass";
     @Autowired
     private LdapProperties ldap;
+    @Autowired
+    private UsersRepository usersRepository;
 
     public UsernamePasswordAuthenticationToken authenticate(String username, String password) throws NamingException {
         DirContext ctx = null;
@@ -34,36 +38,10 @@ public class LdapService {
 
         try {
             ctx = getLdapConnection(username, password);
+            Users users = usersRepository.findByUserId(username);
 
-            String searchFilter = "(&(objectClass=*))";
-            SearchControls searchControls = new SearchControls();
-            searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-
-            String[] returnedAttr = new String[]{MAIL, CN, OBJECT_CLASS};
-
-            StringBuilder builder = new StringBuilder("uid=");
-            builder.append(username)
-                    .append(",dc=example,dc=com");
-
-            NamingEnumeration<SearchResult> ne = ctx.search(builder.toString(), searchFilter, searchControls);
-            while (ne.hasMoreElements()) {
-                SearchResult match = ne.nextElement();
-
-                Attributes attrs = match.getAttributes();
-
-                NamingEnumeration e = attrs.getAll();
-
-                while (e.hasMoreElements()) {
-                    Attribute attr = (Attribute) e.nextElement();
-                    if (attr.getID().equals(OBJECT_CLASS)) {
-                        for (int i = 0; i < attr.size(); i++) {
-                            authorities.add(new SimpleGrantedAuthority((String) attr.get(i)));
-                        }
-                    } else {
-                        details.put(attr.getID(), (String) attr.get(0));
-                    }
-                }
-            }
+            details.put("role", users.getUserRole());
+            authorities.add(new SimpleGrantedAuthority(users.getUserRole()));
         } finally {
             if (ctx != null) {
                 ctx.close();

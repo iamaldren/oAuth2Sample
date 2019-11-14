@@ -21,5 +21,5 @@ ldap:
 oauth2:
   keystore:
     file: iamaldren.p12
-    secret: 
-    alias:
+    secret: Abcde12345
+    alias: iamaldren.com

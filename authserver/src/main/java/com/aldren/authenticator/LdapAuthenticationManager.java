@@ -4,7 +4,6 @@ import com.aldren.ldap.LdapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.naming.NamingException;
 
 @Component
-public class LdapAuthenticationProvider implements AuthenticationManager {
+public class LdapAuthenticationManager implements AuthenticationManager {
 
     @Autowired
     private LdapService ldapService;
